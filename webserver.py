@@ -5,6 +5,14 @@ from io import BytesIO
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 class PortalServer(SimpleHTTPRequestHandler):
+	def do_GET(self):
+		if self.path in ("/", "/index.html", "/1x-trex.png"):
+			return super().do_GET()
+
+		self.send_response(302)
+		self.send_header("Location", "http://10.0.0.1/")
+		self.end_headers()
+
 	def do_POST(self):
 		content_length = int(self.headers["Content-Length"])
 		body = self.rfile.read(content_length)
