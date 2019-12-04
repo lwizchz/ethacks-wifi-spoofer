@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 from io import BytesIO
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
@@ -16,6 +17,9 @@ class PortalServer(SimpleHTTPRequestHandler):
 		response.write(b"thanks")
 		self.wfile.write(response.getvalue())
 
+		sys.exit()
+
 httpd = HTTPServer(("0.0.0.0", 80), PortalServer)
+print("PortalServer starting...")
 httpd.serve_forever()
 
