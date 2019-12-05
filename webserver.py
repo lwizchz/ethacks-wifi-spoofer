@@ -6,7 +6,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 class PortalServer(SimpleHTTPRequestHandler):
 	def do_GET(self):
-		if self.path in ("/", "/index.html", "/1x-trex.png"):
+		if self.path in ("/", "/index.html", "/trex.png", "/wifi-icon.png", "/mac_border.png"):
 			return super().do_GET()
 
 		self.send_response(302)
@@ -16,14 +16,14 @@ class PortalServer(SimpleHTTPRequestHandler):
 	def do_POST(self):
 		content_length = int(self.headers["Content-Length"])
 		body = self.rfile.read(content_length)
-		self.send_response(200)
-		self.end_headers()
+		#self.send_response(200)
+		#self.end_headers()
 		
 		print(body.decode())
 		
-		response = BytesIO()
-		response.write(b"thanks")
-		self.wfile.write(response.getvalue())
+		#response = BytesIO()
+		#response.write(b"thanks")
+		#self.wfile.write(response.getvalue())
 
 		sys.exit()
 

