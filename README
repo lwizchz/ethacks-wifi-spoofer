@@ -1,3 +1,3 @@
 Copyright (c) 2019 by Victor Chau, Louise Montalvo, Tiffany Valitis, and Rolando Varela
 
-This project uses airmon-ng and airbase-ng to spoof an Access Point's MAC address and BSSID in order to execute an evil twin attack.
+This project uses airmon-ng and airbase-ng to spoof an Access Point's BSSID, channel, and ESSID in order to execute an evil twin attack, after which it serves a captive portal to anyone who connects in an attempt to retrieve the password to the original AP.
